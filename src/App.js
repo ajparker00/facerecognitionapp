@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import Navigation from './components/Navigation/Navigation';
-import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
-import FaceRecognition from './components/FaceRecognition/FaceRecognition';
-import Rank from './components/Rank/Rank';
-import Logo from './components/Logo/Logo';
-import Signin from './components/Signin/Signin';
-import Register from './components/Register/Register';
-import Particles from 'react-particles-js';
-import Clarifai from 'clarifai';
 import './App.css';
 
-const app = new Clarifai.App({
-  apiKey: 'cf96e510072e414f961be9272e245e5a',
-});
+// Packages
+import 'tachyons';
+import Particles from 'react-particles-js';
+
+// Components
+import Navigation from './components/Navigation/Navigation';
+import Logo from './components/Logo/Logo';
+import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
+import Rank from './components/Rank/Rank';
+import FaceRecognition from './components/FaceRecognition/FaceRecognition';
+import Signin from './components/Signin/Signin';
+import Register from './components/Register/Register';
+import './App.css';
 
 const particleOptions = {
   particles: {
@@ -84,18 +85,24 @@ class App extends Component {
 
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input });
-    app.models
-      .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
+    fetch('https://rocky-journey-69624.herokuapp.com/imageurl', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        input: this.state.input,
+      }),
+    })
+      .then((response) => response.json())
       .then((response) => {
         if (response) {
-          fetch('https://aqueous-oasis-67980.herokuapp.com/image', {
+          fetch('https://rocky-journey-69624.herokuapp.com/image', {
             method: 'put',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               id: this.state.user.id,
             }),
           })
-            .then((res) => res.json())
+            .then((response) => response.json())
             .then((count) => {
               this.setState(Object.assign(this.state.user, { entries: count }));
             })

@@ -1,25 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class Signin extends Component {
+class Signin extends React.Component {
   constructor(props) {
-    super();
-
+    super(props);
     this.state = {
       signInEmail: '',
       signInPassword: '',
     };
   }
 
-  onEmailChange = (e) => {
-    this.setState({ signInEmail: e.target.value });
+  onEmailChange = (event) => {
+    this.setState({ signInEmail: event.target.value });
   };
 
-  onPasswordChange = (e) => {
-    this.setState({ signInPassword: e.target.value });
+  onPasswordChange = (event) => {
+    this.setState({ signInPassword: event.target.value });
   };
 
   onSubmitSignIn = () => {
-    fetch('https://aqueous-oasis-67980.herokuapp.com/signin', {
+    fetch('https://rocky-journey-69624.herokuapp.com/signin', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -27,7 +26,7 @@ class Signin extends Component {
         password: this.state.signInPassword,
       }),
     })
-      .then((res) => res.json())
+      .then((response) => response.json())
       .then((user) => {
         if (user.id) {
           this.props.loadUser(user);
@@ -38,7 +37,6 @@ class Signin extends Component {
 
   render() {
     const { onRouteChange } = this.props;
-
     return (
       <article className='br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center'>
         <main className='pa4 black-80'>
